@@ -1,0 +1,30 @@
+
+version: '2'
+services:
+    web:
+      image: nginx:latest
+      ports:
+          - "8080:80"
+      volumes:
+          - ./:/app
+          - ./site.conf:/etc/nginx/conf.d/default.conf
+      networks:
+          - code-network
+      depends_on:
+        - tbshare
+    tbshare:
+      #build: .
+      image: bitnami/php-fpm:latest
+      volumes:
+      - ./:/app
+      environment:
+        - ADMIN_USER=admin
+        - ADMIN_PASS=admin
+      networks:
+          - code-network
+      ports:
+        - "9000:9000"
+
+networks:
+    code-network:
+        driver: bridge
