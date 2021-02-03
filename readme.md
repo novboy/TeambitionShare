@@ -1,4 +1,18 @@
 # TeambitionShare
+
+## 自用nginx+php docker版本
+
+```
+docker rm -f tbshare
+docker run -d --name tbshare --restart always --net edgora \
+    -v $PWD/sys.cfg.php:/app/config/sys.cfg.php \
+    edgora/tbshare
+docker rm -f tbshare_web
+docker run -d --name tbshare_web --restart always --net edgora \
+    -p 80:80 \
+    edgora/tbshare-web
+```
+
 挂载Teambition文件(网盘文件列表程序)  
 ## 说明
 已支持Teambition网盘(需申请)与Teambition项目  
