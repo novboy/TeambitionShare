@@ -2,7 +2,7 @@
 
 ## 自用nginx+php docker版本
 
-```
+```bash
 docker rm -f tbshare
 docker run -d --name tbshare --restart always --net edgora \
     -v $PWD/sys.cfg.php:/app/config/sys.cfg.php \
