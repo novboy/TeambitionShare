@@ -1,7 +1,7 @@
 <?php
 /**
  * Teambition操作类
- * @author FlxSNX<211154860@qq.com>
+ * @author 拾年<211154860@qq.com>
  * @version 1.1
  */
 
@@ -99,13 +99,13 @@ class teambition{
      * @param int $page 页码
      * @return array
      */
-    public static function get_dir($projectId,$dirId,$cookie,$page=1){
+    public static function get_dirs($projectId,$dirId,$cookie,$count=100,$order='updatedDesc',$page=1){
         $api = 'https://www.teambition.com/api/collections?';
         $param = [
             '_parentId' => $dirId,
             '_projectId' => $projectId,
-            'order' => 'updatedDesc',
-            'count' => 50,
+            'order' => $order,
+            'count' => $count,
             'page' => $page
         ];
         $result = self::get($api.http_build_query($param),$cookie);
@@ -125,13 +125,13 @@ class teambition{
      * @param int $page 页码
      * @return array
      */
-    public static function get_files($projectId,$dirId,$cookie,$page=1){
+    public static function get_files($projectId,$dirId,$cookie,$count=100,$order='updatedDesc',$page=1){
         $api = 'https://www.teambition.com/api/works?';
         $param = [
             '_parentId' => $dirId,
             '_projectId' => $projectId,
-            'order' => 'updatedDesc',
-            'count' => 50,
+            'order' => $order,
+            'count' => $count,
             'page' => $page
         ];
         $result = self::get($api.http_build_query($param),$cookie);
@@ -144,7 +144,7 @@ class teambition{
     }
 
     /**
-     * 获取文件下载链接
+     * 获取文件下载链接(获取文件信息)
      * @param string $parentId 文件ID
      * @param string $cookie teambitionCookie
      * @return array
@@ -154,6 +154,20 @@ class teambition{
         if($result){
             $result = json_decode($result,true);
             if($result['downloadUrl']){
+                return $result;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+
+    public static function get_dir($parentId,$cookie){
+        $result = self::get('https://www.teambition.com/api/collections/'.$parentId,$cookie);
+        if($result){
+            $result = json_decode($result,true);
+            if($result){
                 return $result;
             }else{
                 return false;
@@ -226,7 +240,7 @@ class teambition{
     }
 
     /**
-     * 获取网盘文件信息
+     * 获取网盘文件(文件夹)信息
      * @param string $cookie teambitionCookie
      * @param string $orgId
      * @param string $spaceId
